@@ -1,3 +1,6 @@
+<?php
+    require_once('dbconn.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,40 +18,52 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
-                        <h3>Insert New Data</h3>
+                        <h3>Edit and Update</h3>
                         <a href="index.php" class="btn btn-danger">BACK</a>
                     </div>
                     <div class="card-body">
+                        <?php
+                            if(isset($_GET['id'])){
+                                $student_id= $_GET['id'];
+                                $sql = "SELECT * FROM student WHERE id=:student_id";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':student_id',$student_id);
+                                $stmt->execute();
+
+                                $res = $stmt->fetch();
+                            }
+                        ?>
                         <form action="code.php" method="POST">
+                            <input type="hidden" name="student_id" value="<?= $res['id']; ?>">
                             <div class="form-group row mt-3">
                                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Name">
+                                        placeholder="Name" value="<?=$res['name']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?=$res['email']; ?>">
                                 </div>
                             </div>
 
                             <div class="form-group row mt-3">
                                 <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone">
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" value="<?=$res['phone']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="course" class="col-sm-2 col-form-label">Course</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="course" id="course" placeholder="Course">
+                                    <input type="text" class="form-control" name="course" id="course" placeholder="Course" value="<?=$res['course']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row mt-3 text-center">
                                 <div class="col-sm-10">
-                                    <button type="submit" name="add-btn" class="btn btn-primary">ADD</button>
+                                    <button type="submit" name="update-btn" class="btn btn-primary">UPDATE</button>
                                 </div>
                             </div>
                         </form>
